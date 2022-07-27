@@ -22,7 +22,6 @@ export class Message extends CustomScene {
 
         this.forHistory = false;
     }
-
     preload() {
         let ego = this;
         ego.load.setBaseURL('./');

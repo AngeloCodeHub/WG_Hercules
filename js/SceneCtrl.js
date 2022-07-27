@@ -1,18 +1,16 @@
 import * as phaser from './phaser.min.js';
 import { MainGame } from './MainGame.js';
 // import { Loading } from './loading.js';
-import { SceneLoading } from './loading.js';
-
+// import { SceneLoading } from './loading.js';
 
 class Controller {
   constructor() {
     var config = {
-      type: Phaser.AUTO,
+      // type: Phaser.AUTO,
+      type: Phaser.WEBGL,
       backgroundColor: '#000000',
       parent: "FruitParty",
-      dom: {
-        createContainer: true
-      },
+      dom: { createContainer: true },
       scale: {
         mode: Phaser.Scale.FIT,
         parent: document.getElementById("MainGame"),
@@ -21,11 +19,10 @@ class Controller {
         height: 1280,
       },
       // scene: [new Loading("MainGame"), MainGame]
-      scene: [new SceneLoading("MainGame"), MainGame]
-
+      // scene: [new SceneLoading("MainGame"), MainGame]
+      scene: [MainGame]
     };
     this.game = new Phaser.Game(config);
-
     this.game.canSound = true;
   }
   CheckCanSound() {

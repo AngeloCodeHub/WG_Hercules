@@ -1,3 +1,6 @@
+/**
+ * 賠率表資訊，遊戲說明
+ */
 import * as phaser from './phaser.min.js';
 import { Button,ChangeNumText_Comma } from './CustomTools.js';
 

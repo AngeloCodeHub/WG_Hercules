@@ -1,3 +1,6 @@
+/**
+ * 最上方捲動文字(UpUI)
+ */
 import { CustomScene, Button } from './CustomTools.js';
 
 export class ScrollText extends CustomScene {

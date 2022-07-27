@@ -24,9 +24,7 @@ export class CustomScene extends Phaser.Scene {
         }
         this.onceload._self = this;
     }
-    preload() {
-
-    }
+    preload() { }
     create() {
         this.input.topOnly = true;
         /* 全螢幕偵測 */
@@ -46,7 +44,6 @@ export class CustomScene extends Phaser.Scene {
         }
     }
 }
-
 /*  按鈕  */
 export class Button {
     get Main() { return this.main }
@@ -90,7 +87,6 @@ export class Button {
         this.clickEvent = clickEvent;
     }
     click() { if (!this.isDisable) { this.clickEvent == null ? this.event() : this.clickEvent(); } }
-
     setPointDown(new_sprite, event = null) {
         this.main.off('pointerdown');
         this.main.on('pointerdown', function () {
@@ -151,9 +147,7 @@ export class Button {
     destroy() {
         this.main.destroy();
     }
-
 }
-
 export function SetCookie(name, value) {
     try {
         let st = name + '=' + value.toString();
@@ -167,7 +161,6 @@ export function GetCookie(name) {
         if (parts.length === 2) return parts.pop().split(';').shift();
     } catch (e) { }
 }
-
 export var ChangeNumText_Comma = function (value, fix = 0) {
     let st = value < 0 ? "-" : "";
     let i = String(parseInt(value = Math.abs(Number(value) || 0).toFixed(fix)));

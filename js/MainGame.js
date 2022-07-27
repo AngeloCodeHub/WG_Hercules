@@ -22,7 +22,8 @@ import { cmd_ReBet } from '../common_old/Sockets/cmd_14_1_2_ReBet.js';
 export class MainGame extends CustomScene {
 	constructor() {
 		// scene繼承的寫法
-		super("MainGame");
+		// super("MainGame");
+		super();
 		this.phpServer = false;
 		//#region 其他腳本class
 		this.RollBarControl = new RollBarControl(this);//滾輪控制
@@ -35,9 +36,7 @@ export class MainGame extends CustomScene {
 		this.Message = new Message(this);
 		this.scrollText = new ScrollText(this);
 		//#endregion 其他腳本class
-
 		this.disLink = false;
-
 		//#region 假封包
 		this.P_prize_jewellery = [0, 0, 0, 0];//珠子結果封包
 		this.P_prize_jewellerytext = [0, 0, 0, 0];//珠子文字結果封包
@@ -47,7 +46,6 @@ export class MainGame extends CustomScene {
 		this.P_prize_win = [];//中獎方塊
 		this.P_prize_role = [0, 0, 0, 0];//角色結果封包
 		//#endregion
-
 		// None = -1,
 		// Heracles = 海克力斯 = 0,
 		// Zeus = 宙斯 = 1,
@@ -60,11 +58,9 @@ export class MainGame extends CustomScene {
 		// Bison = 野牛 = 8,
 		// apple = 蘋果(WILD) = 9,
 		var self = this;
-
 		this.MissWin = true;//沒中獎 直接進入按鈕恢復狀態程式環節 true沒中 fales中獎 有沒有中獎這個也需要跟著更改
 		this.Winning = false;
 		this.status_win = -1;
-
 		this.prize_NO = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		this.prize = [];
 		this.status = -1;						//遊戲狀態
@@ -72,10 +68,8 @@ export class MainGame extends CustomScene {
 		this.status_BG = 0;
 		this.auto = false;
 		this.WDbg = [];
-
 		this.myMoney = 1000;					//玩家總金額
 		this.moneyChangeOdd = 20;
-
 		this.notEnoughMoney = false;
 		this.PointsMoney = 0;					//儲值後公道幣總金額
 		this.haveMoneyfromSer = false;			//是否收到儲值(1.0.5)封包
@@ -88,26 +82,19 @@ export class MainGame extends CustomScene {
 		this.AllCubeFinish = true;				//方塊是否停止
 		this.AllFinish = true;					//整體遊戲是否完成
 		this.FailToBet = false;					//押注封包錯誤
-
 		this.betIndex = 0;
 		this.myBet = 200;						//押注
 		this.myTotalBet = 200;					//總押注
-
 		this.showBigWinCoin = false;
 		this.nowBigWinLevel = 0;
-
 		this.CoinName = null;
 		this.url = null;
 		this.isTest = false;
-
 		this.index = 0;
 		this.Free_index = -1;
-
 		this.betArray = [];
-
 		this.UseSetting = null;//使用環境(電腦 或 機台)
 		this.ApiCtrl = null;
-
 		window.MainGame = this;
 	}
 	preload() {
@@ -118,17 +105,13 @@ export class MainGame extends CustomScene {
 		this.Hercules.preload();
 		this.JewelleryControl.preload();
 		this.MusicAndSE.preload();
-
 		ego.load.setBaseURL('./');
-
 		ego.onceload.image('G14_topBG1', 'assets/hercules_bg_2.png');
 		ego.onceload.image('G14_topBG2', 'assets/hercules_bg_1.png');
 		ego.onceload.image('G14_topBG3', 'assets/hercules_topbg_01.png');
 		ego.onceload.image('G14_topBG4', 'assets/hercules_cloud_001_v3.png')
 		ego.onceload.image('G14_topBG4_free', 'assets/hercules_cloud_003_v3.png')
-
 		ego.onceload.spritesheet('Hercules_role_cube', 'assets/Cube/hercules_role.png', { frameWidth: 140, frameHeight: 140 });
-
 		//#region 賠率表按鈕
 		ego.onceload.image('OddBtn_N', 'assets/Odd/hercules_btn_caption.png');
 		ego.onceload.image('OddBtn_P', 'assets/Odd/hercules_btn_caption.png');
@@ -148,23 +131,19 @@ export class MainGame extends CustomScene {
 		ego.onceload.image('StartWave1', 'assets/DownUI/StartButton/Shockwave.png');
 		ego.onceload.image('StartWave2', 'assets/DownUI/StartButton/Shockwave2.png');
 		ego.onceload.spritesheet('startLightAni_Sheet', 'assets/DownUI/download_button_light.png', { frameWidth: 120, frameHeight: 120 });
-
 		ego.onceload.image('Start_A', 'assets/DownUI/StartButton/btn_ring.png');
 		ego.onceload.image('StartRollLight', 'assets/DownUI/StartButton/fruit_start_spinlight_fast.png');
 		ego.onceload.image('StartOutRollLight', 'assets/DownUI/StartButton/eff_ring_02.png');
 		ego.onceload.image('StartSmallLight', 'assets/DownUI/StartButton/eff_ring_03.png');
 		ego.onceload.image('StartTextImage', 'assets/DownUI/StartButton/eff_ring_04.png');
 		ego.onceload.image('StopTextImage', 'assets/DownUI/StartButton/eff_ring_05.png');
-
 		/* 加注減注按鈕 和 加線減線按鈕 */
 		ego.onceload.image('Bet++_A', 'assets/DownUI/hercules_btn_001.png');    //一般狀態
 		ego.onceload.image('Bet++_B', 'assets/DownUI/hercules_btn_001_no.png');	//按下狀態
 		ego.onceload.image('Bet++_C', 'assets/DownUI/hercules_btn_no_001.png'); //禁用狀態
-
 		ego.onceload.image('Bet--_A', 'assets/DownUI/hercules_btn_002.png');
 		ego.onceload.image('Bet--_B', 'assets/DownUI/hercules_btn_002_no.png');
 		ego.onceload.image('Bet--_C', 'assets/DownUI/hercules_btn_no_002.png');
-
 		ego.onceload.image('MaxBet_A', 'assets/DownUI/hercules_btn_maxbet.png');
 		ego.onceload.image('MaxBet_B', 'assets/DownUI/hercules_btn_maxbet_no_b.png');
 		ego.onceload.image('MaxBet_C', 'assets/DownUI/hercules_btn_maxbet_no.png');
@@ -227,12 +206,10 @@ export class MainGame extends CustomScene {
 		//#region 宙斯顯示特效(修改成中獎顯示特效)
 		ego.onceload.spritesheet('Zeus_eff', 'assets/hercules_role_eff_z.png', { frameWidth: 111, frameHeight: 111 });
 		//#endregion
-
 		this.History = new History(this);
 		this.scene.add('History', this.History, true, { x: 0, y: 0 });
 		this.scene.add('Message', this.Message, true, { x: 0, y: 0 });
 		this.scene.add('ScrollText', this.scrollText, true, { x: 0, y: 0 });
-
 		//#region 判定電腦還是機台
 		if (this.UseSetting == 'ROBOT1') {
 			this.betIndex = 0;
@@ -250,7 +227,6 @@ export class MainGame extends CustomScene {
 			else break;
 		}
 		//#endregion
-
 	}
 	create() {
 		let ego = this;
@@ -272,29 +248,23 @@ export class MainGame extends CustomScene {
 		this.Hercules.create();
 		this.G14_topBG2 = ego.add.image(360, 323, 'G14_topBG2');//神廟(不含天空)		
 		//#endregion
-
 		this.JewelleryControl.create();//寶珠
-
 		this.G14_topBG1 = ego.add.image(360, 720, 'G14_topBG1');//下半部背景
-		//#region 方塊
+		//#region 方塊本身物件
 		this.prize[18] = ego.add.sprite(360, 440, 'Hercules_role_cube', 0).setScale(1.06);
-
 		this.prize[17] = ego.add.sprite(504, 580, 'Hercules_role_cube', 0).setScale(1.06);
 		this.prize[16] = ego.add.sprite(360, 580, 'Hercules_role_cube', 0).setScale(1.06);
 		this.prize[15] = ego.add.sprite(216, 580, 'Hercules_role_cube', 0).setScale(1.06);
-
 		this.prize[14] = ego.add.sprite(648, 720, 'Hercules_role_cube', 0).setScale(1.06);
 		this.prize[13] = ego.add.sprite(504, 720, 'Hercules_role_cube', 0).setScale(1.06);
 		this.prize[12] = ego.add.sprite(360, 720, 'Hercules_role_cube', 0).setScale(1.06);
 		this.prize[11] = ego.add.sprite(216, 720, 'Hercules_role_cube', 0).setScale(1.06);
 		this.prize[10] = ego.add.sprite(72, 720, 'Hercules_role_cube', 0).setScale(1.06);
-
 		this.prize[9] = ego.add.sprite(648, 860, 'Hercules_role_cube', 0).setScale(1.06);
 		this.prize[8] = ego.add.sprite(504, 860, 'Hercules_role_cube', 0).setScale(1.06);
 		this.prize[7] = ego.add.sprite(360, 860, 'Hercules_role_cube', 0).setScale(1.06);
 		this.prize[6] = ego.add.sprite(216, 860, 'Hercules_role_cube', 0).setScale(1.06);
 		this.prize[5] = ego.add.sprite(72, 860, 'Hercules_role_cube', 0).setScale(1.06);
-
 		this.prize[4] = ego.add.sprite(648, 1005, 'Hercules_role_cube', 0).setScale(1.06);
 		this.prize[3] = ego.add.sprite(504, 1005, 'Hercules_role_cube', 0).setScale(1.06);
 		this.prize[2] = ego.add.sprite(360, 1005, 'Hercules_role_cube', 0).setScale(1.06);
@@ -304,29 +274,24 @@ export class MainGame extends CustomScene {
 		this.prize[0].setMask(this.mask_1.createGeometryMask());
 		this.prize[5].setMask(this.mask_1.createGeometryMask());
 		this.prize[10].setMask(this.mask_1.createGeometryMask());
-
 		this.prize[1].setMask(this.mask_2.createGeometryMask());
 		this.prize[6].setMask(this.mask_2.createGeometryMask());
 		this.prize[11].setMask(this.mask_2.createGeometryMask());
 		this.prize[15].setMask(this.mask_2.createGeometryMask());
-
 		this.prize[2].setMask(this.mask_3.createGeometryMask());
 		this.prize[7].setMask(this.mask_3.createGeometryMask());
 		this.prize[12].setMask(this.mask_3.createGeometryMask());
 		this.prize[16].setMask(this.mask_3.createGeometryMask());
 		this.prize[18].setMask(this.mask_3.createGeometryMask());
-
 		this.prize[3].setMask(this.mask_4.createGeometryMask());
 		this.prize[8].setMask(this.mask_4.createGeometryMask());
 		this.prize[13].setMask(this.mask_4.createGeometryMask());
 		this.prize[17].setMask(this.mask_4.createGeometryMask());
-
 		this.prize[4].setMask(this.mask_5.createGeometryMask());
 		this.prize[9].setMask(this.mask_5.createGeometryMask());
 		this.prize[14].setMask(this.mask_5.createGeometryMask());
 		//#endregion
 		//#endregion
-
 		this.G14_topBG3 = ego.add.image(360, 720, 'G14_topBG3').setAlpha(1);//方塊框架		
 		//#region 中獎提示白圖
 		for (let i = 0; i < this.prize.length; i++) {
@@ -373,16 +338,12 @@ export class MainGame extends CustomScene {
 		//#region 數字文字
 		this.upUIMoneyText = ego.add.text(475, 1250, '0', { font: 'bold 20pt 微軟正黑體', color: '#ffffff' }).setOrigin(1, 0.5).setDepth(4);
 		this.upUIMoneyText.setText(ChangeNumText_Comma(0));
-
 		this.winMoneyText = ego.add.bitmapText(360, 1170, 'bet_WinNum', 0).setOrigin(0.5).setDepth(4).setFontSize(24);
 		this.winMoneyText.setText(ChangeNumText_Comma(0));//Win的錢的數字
-
 		this.betText = ego.add.text(115, 1157, '0', { font: 'bold 24pt 微軟正黑體', color: '#ffffff' }).setOrigin(0.5, 0.5).setDepth(4);
 		this.betText.setText(ChangeNumText_Comma(this.myBet));//押注額的數字
-
 		this.exchangeText = ego.add.text(660, 1215, '', { font: 'bold 14pt 微軟正黑體', color: '#ffed00' }).setStroke('#000000', 2).setOrigin(1, 0.5).setDepth(6).setVisible(false);
 		this.exchangeText.setText(ChangeNumText_Comma(0));
-
 		this.addMoneyText = ego.add.text(425, 1225, '0', { font: 'bold 20pt 微軟正黑體', color: '#0024E5' }).setStroke('#eeeeee', 1).setOrigin(0, 1).setDepth(10).setAlpha(0);
 		this.addMoneyAni = this.tweens.add({
 			targets: this.addMoneyText,
@@ -392,7 +353,7 @@ export class MainGame extends CustomScene {
 			yoyo: true, hold: 5000,
 		})
 		this.addMoneyAni.pause();
-		//#endregion (數字文字)		
+		//#endregion 數字文字
 		//#region 押注金額選表按鈕
 		// this.BetBoard = new BetBoard(this, this.betArray, 'Odd_Close_N', config);//押注選擇面板(this,押注金額項目,關閉按鈕圖片,)
 		this.BetBoard = new BetBoard(this, this.betArray, 'Odd_Close_N', (index) => {
@@ -403,7 +364,6 @@ export class MainGame extends CustomScene {
 			this.AutoBtn.disable(false, 'Auto_A');
 		}, { closeBtnScale: 2 });
 		this.BetBoard.con.setDepth(52);
-
 		this.betListOpen = new Button(ego, 'WDBG', 'WDBG', 115, 1157, function () {
 			// this.betListCon.setVisible(true);
 			this.BetBoard.Occur(true);
@@ -436,16 +396,13 @@ export class MainGame extends CustomScene {
 		//#region _自動及快停按鈕
 		this.autoStArray = ["10轉", "50轉", "100轉", "無限"];
 		this.autoIndexArray = [10, 50, 100, -1];
-
 		this.autoBoard = new BetBoard(this, this.autoStArray, 'Odd_Close_N', (index) => {
 			this.autoBoard.ChangeBet(index);
 			this.autoBoard.Occur(false);
 			this.autoTimes = this.autoIndexArray[index];
-
 			this.auto = true;
 			this.AutoBtn.changeBtnImage('Stop_A', 'Stop_A');
 			this.ShowAutoTimes(true);
-
 			if (this.AllCubeFinish == true) {
 				if (this.auto) {
 					if (this.myMoney >= this.myTotalBet) {
@@ -460,15 +417,12 @@ export class MainGame extends CustomScene {
 			}
 			this.MusicAndSE.PlaySoundEffect('SE_OddChange');
 		}, { x: 475, y: 1055, originX: 1, originY: 1, titleTextSt: "轉動次數", titleTextfont: "bold 30pt 微軟正黑體", numTextfont: "bold 24pt 微軟正黑體", gap: [110, 60], closeBtnScale: 2 });
-
 		this.AutoBtn = new Button(this, 'Auto_A', 'Auto_A', 520, 1130, () => {
 			this.autoBoard.Occur(this.autoBoard.con.scale > 0 ? 0 : 1, false);
 			this.autoTimes = 0;
-
 			this.auto = false;
 			this.AutoBtn.changeBtnImage('Auto_A', 'Auto_A');
 			this.ShowAutoTimes(false);
-
 			if (this.BetBoard.con.scale > 0) { this.BetBoard.Occur(false); }
 		}); this.AutoBtn.main.setDepth(4);
 		this.AutoBtn.setClick(() => {
@@ -476,7 +430,6 @@ export class MainGame extends CustomScene {
 				this.auto = true;
 				this.autoTimes = -1;
 				this.AutoBtn.ChangeStage(true);
-
 				if (this.AllCubeFinish == true) {
 					if (this.auto) {
 						if (this.myMoney >= this.myTotalBet) {
@@ -495,15 +448,12 @@ export class MainGame extends CustomScene {
 				this.AutoBtn.ChangeStage(false);
 			}
 		})
-
 		this.autoTimesTitle = this.add.text(630, 1220, '自動次數', { font: 'bold 18pt 微軟正黑體', color: '#cccc99' }).setOrigin(0.5).setDepth(10).setVisible(false);
 		this.autoTimesText = this.add.bitmapText(630, 1165, 'bet_autoTimesNum', 0).setFontSize(26).setOrigin(0.5).setDepth(10).setVisible(false);
-
 		// this.AutoBtn = new Button(ego, 'Auto_A', 'Auto_B', 620, 1165, (function () {
 		// 	if (this.myMoney >= this.myTotalBet) {
 		// 		this.auto = !this.auto;
 		// 		this.AutoBtn.changeBtnImage(this.auto ? 'Stop_A' : 'Auto_A', this.auto ? 'Stop_B' : 'Auto_B');
-
 		// 		if (this.AllCubeFinish == true) {
 		// 			if (this.auto) {
 		// 				if (this.myMoney >= this.myTotalBet) {
@@ -523,7 +473,6 @@ export class MainGame extends CustomScene {
 		// 	}
 		// }).bind(this));
 		// this.AutoBtn.main.setDepth(4);
-
 		this.quickStop = false;
 		this.QuickBtn = new Button(ego, 'Quick_Off', 'Quick_On', 520, 1210, (function () {
 			this.quickStop = !this.quickStop;
@@ -532,11 +481,9 @@ export class MainGame extends CustomScene {
 		//#endregion
 		//#region 開始按鈕
 		this.StartBtnCon = ego.add.container(630, 1180).setScale(0.95).setDepth(4);
-
 		this.startEffectSpeed = 1;
 		this.startNorTask = {};
 		this.startNorAni;
-
 		this.StartBtn = new Button(ego, 'Start_A', 'Start_A', 0, 0, function () {
 			if (this.myMoney >= this.myTotalBet) {
 				if (this.meStart == 0) {
@@ -551,23 +498,19 @@ export class MainGame extends CustomScene {
 				this.Message.ShowMessage(this.CoinName + ' 不足', true, true, false);
 				console.log('錢不夠 押注金額: ' + this.myTotalBet + '你的錢: ' + this.myMoney);
 			}
-
 		}.bind(this));
 		this.StartBtn.setContainer(this.StartBtnCon);
-
 		this.StartBtn.setPointDown('Start_A', function () {
 			if (!this.notEnoughMoney) {
 				this.StartAniDown();
 			}
 		}.bind(this));
-
 		this.StartBtn.setPointOut(function () {
 			if (this.startEffectSpeed === -0.05) {
 				this.StartAniNormal();
 				this.StartArcAniNormal();
 			}
 		}.bind(this))
-
 		//#region _-圖片
 		let startTextImage = ego.add.image(0, 0, 'StartTextImage').setScale(1);
 		let startSmallLight = ego.add.image(0, 0, 'StartSmallLight').setAlpha(1);
@@ -579,14 +522,12 @@ export class MainGame extends CustomScene {
 		//#region 電弧測試_圖片
 		this.Arc_out = ego.add.image(0, 0, 'StartOutRollLight').setScale(1).setAlpha(1);
 		//#endregion
-
 		this.StartBtnCon.add([
 			this.startWave1, this.startWave2, startSmallLight, startRollLight, startTextImage, startLightAni,
 			this.Arc_out
 		])
 		this.StartBtnCon.sendToBack(this.startWave1);
 		this.StartBtnCon.sendToBack(this.startWave2);
-
 		//#endregion (圖片)
 		//#region _-動畫
 		this.startAniTime = { t1: 0, t2: 0, t3: 1, wave: false };
@@ -629,7 +570,6 @@ export class MainGame extends CustomScene {
 				}
 			}.bind(this),
 		}
-
 		//#region 電弧動畫測試
 		this.change_tmp = Phaser.Math.Between(2, 3);
 		this.startArcBGAni = this.tweens.add({
@@ -652,7 +592,6 @@ export class MainGame extends CustomScene {
 			}.bind(this),
 		})
 		//#endregion
-
 		this.startNorAni = null;
 		this.StartAniNormal();
 		//#endregion (動畫)
@@ -678,23 +617,19 @@ export class MainGame extends CustomScene {
 		this.Zeff = [];
 		ego.anims.create({ key: 'Zeus_effAni', frames: ego.anims.generateFrameNumbers('Zeus_eff'), duration: 200, repeat: -1 });
 		this.Zeff[18] = ego.add.sprite(360, 440, 'Zeus_eff').setScale(1.5).setAlpha(0);
-
 		this.Zeff[17] = ego.add.sprite(504, 580, 'Zeus_eff').setScale(1.5).setAlpha(0);
 		this.Zeff[16] = ego.add.sprite(360, 580, 'Zeus_eff').setScale(1.5).setAlpha(0);
 		this.Zeff[15] = ego.add.sprite(216, 580, 'Zeus_eff').setScale(1.5).setAlpha(0);
-
 		this.Zeff[14] = ego.add.sprite(648, 720, 'Zeus_eff').setScale(1.5).setAlpha(0);
 		this.Zeff[13] = ego.add.sprite(504, 720, 'Zeus_eff').setScale(1.5).setAlpha(0);
 		this.Zeff[12] = ego.add.sprite(360, 720, 'Zeus_eff').setScale(1.5).setAlpha(0);
 		this.Zeff[11] = ego.add.sprite(216, 720, 'Zeus_eff').setScale(1.5).setAlpha(0);
 		this.Zeff[10] = ego.add.sprite(72, 720, 'Zeus_eff').setScale(1.5).setAlpha(0);
-
 		this.Zeff[9] = ego.add.sprite(648, 860, 'Zeus_eff').setScale(1.5).setAlpha(0);
 		this.Zeff[8] = ego.add.sprite(504, 860, 'Zeus_eff').setScale(1.5).setAlpha(0);
 		this.Zeff[7] = ego.add.sprite(360, 860, 'Zeus_eff').setScale(1.5).setAlpha(0);
 		this.Zeff[6] = ego.add.sprite(216, 860, 'Zeus_eff').setScale(1.5).setAlpha(0);
 		this.Zeff[5] = ego.add.sprite(72, 860, 'Zeus_eff').setScale(1.5).setAlpha(0);
-
 		this.Zeff[4] = ego.add.sprite(648, 1005, 'Zeus_eff').setScale(1.5).setAlpha(0);
 		this.Zeff[3] = ego.add.sprite(504, 1005, 'Zeus_eff').setScale(1.5).setAlpha(0);
 		this.Zeff[2] = ego.add.sprite(360, 1005, 'Zeus_eff').setScale(1.5).setAlpha(0);
@@ -742,28 +677,22 @@ export class MainGame extends CustomScene {
 		let bigWinBG_W = ego.add.image(0, 0, 'bigWin_BG_White_0').setAlpha(0);
 		let bigWinWord_W = ego.add.image(0, -20, 'bigWin_Word_White_0').setAlpha(0);
 		let bigWinBG_forEffect = ego.add.image(0, 0, 'bigWin_BG_White_0').setVisible(false);
-
 		this.bigWinScore_bitText = ego.add.bitmapText(0, 75, 'bigWinScore', 0).setOrigin(0.5, 1).setScale(1);
-
 		this.bigWinCon.add([
 			bigWinLight, bigWinBG, bigWinWord, this.bigWinScore_bitText, bigWinBG_W, bigWinWord_W, bigWinBG_forEffect
 		])
 		//#endregion
-
 		this.blackCover = ego.add.image(360, 640, 'blackCover').setOrigin(0.5).setDepth(75).setAlpha(0).setInteractive();
-
 		this.RollBarControl.create(this.prize);
 		this.Odd.create();
 		this.MusicAndSE.create();
 		this.Leaderboard.create();
 		this.PhysicalSystem.create();
-
 		this.historyBtn = new Button(ego, 'his_hisBtn', 'his_hisBtn', 113, 1247, (function () {
 			// this.WinEffectCtrl.StopShow();  //開啟時關閉中獎顯示
 			this.History.Occur(true);
 		}).bind(this));
 		this.historyBtn.main.setDepth(4);
-
 		this.scene.bringToTop('Message');
 		this.scene.bringToTop('ScrollText');
 		this.scene.bringToTop('History');
@@ -771,7 +700,6 @@ export class MainGame extends CustomScene {
 		this.scrollText.playerNameText.setText('玩家名稱');
 		this.BtnAllDisable(true);//開啟全部按鈕禁用狀態
 		this.Message.ShowMessage('等待資料', true, false, true);//開啟等待資料遮罩畫面
-
 		if (this.phpServer) {
 			Socket_php.init(this);
 		} else {
@@ -779,7 +707,6 @@ export class MainGame extends CustomScene {
 				MySocket.init(this);
 			}
 		}
-
 		this.BetNumber(this.betIndex);
 		this.History.myCreate();
 	}
@@ -788,13 +715,11 @@ export class MainGame extends CustomScene {
 		switch (this.status) {//遊戲狀態
 			case -1://空白
 				break;
-
 			case 0://等待	
 				///console.log('等待')
 				break;
 			case 1://滾輪滾動
 				this.RollBarControl.update();
-
 				this.SetNewPrize();
 				this.StartMode();
 				break;
@@ -802,7 +727,6 @@ export class MainGame extends CustomScene {
 		if (this.showBigWinCoin || !this.PhysicalSystem.allCoinOut) {
 			this.PhysicalSystem.Action();
 		}
-
 		this.Hercules.update();
 		this.JewelleryControl.update();
 	}
@@ -819,7 +743,6 @@ export class MainGame extends CustomScene {
 		let absValue = Math.abs(value);
 		this.addMoneyText.setText(mark + ChangeNumText_Comma(absValue));
 		this.addMoneyAni.restart();
-
 		// this.SetMyMoney(this.myMoney + value);
 		this.finalScore = pt == null ? (this.myMoney + value) : pt;
 		this.UpdateScore(100);
@@ -829,7 +752,6 @@ export class MainGame extends CustomScene {
 		let absValue = Math.abs(value);
 		this.addMoneyText.setText(mark + ChangeNumText_Comma(absValue));
 		this.addMoneyAni.restart();
-
 		// this.SetMyMoney(this.myMoney + value);
 		this.finalScore = pt == null ? (this.myMoney + value) : pt;
 		this.UpdateScore(100);
@@ -858,14 +780,11 @@ export class MainGame extends CustomScene {
 		if (this.P_FreeGame == false) {
 			if (!this.disLink) {
 				this.updateHistory = false;
-
 				if (this.phpServer) { Socket_php.bet(this.myBet); }
 				else { cmd_Bet.send(this.myBet); }
-
 				SetCookie('State', 1);
 				SetCookie('LastBet', this.myBet);
 				this.SetMyMoney(this.myMoney - this.myBet);
-
 				this.haveCountAuto = false;
 			}
 		}
@@ -879,8 +798,6 @@ export class MainGame extends CustomScene {
 		// this.JewelleryControl.ControlShowJewellery(this.P_prize_jewellery, this.P_prize_jewellerytext, this.P_prize_role, this.P_FreeGame);
 		this.StartEndJewellery = true;
 		//#endregion
-
-
 		this.AllCubeFinish = false;
 		this.AllFinish = false;
 		this.meStart = 1;
@@ -891,7 +808,6 @@ export class MainGame extends CustomScene {
 		this.MaxBetBtn.disable(true, 'MaxBet_C');
 		// this.historyBtn.disable(true, 'his_hisBtn');
 		// console.log('Start');
-
 		//#region 開始按鈕的動畫
 		this.StartAniDown();
 		let timeline = this.tweens.createTimeline();
@@ -933,7 +849,6 @@ export class MainGame extends CustomScene {
 			let tmp = this.P_prize_win[k];
 			this.startWDbgTask.targets.push(this.Zeff[tmp]);
 			this.status_win = -1;
-
 			let obj = this.prize[this.P_prize_win[k]];
 			if (obj.myFrame < 9) obj.play('cube_' + obj.myFrame + '_Ani');
 		}
@@ -1004,7 +919,6 @@ export class MainGame extends CustomScene {
 					this.History.UpdateNowShowAry();
 					this.updateHistory = true;
 				}
-
 				if (this.StartEndJewellery == true) {
 					this.JewelleryControl.ControlCloseJewellery(this.JewelleryControl.getJewelleryWinning(), this.P_FreeGame, true);
 					for (let i = 0; i < 4; i++) {
@@ -1020,7 +934,6 @@ export class MainGame extends CustomScene {
 						this.auto = false;
 						this.ShowAutoTimes(false);
 					}
-
 					if (this.ScoreBoardAniFinish == true && this.moneyFinish == true) {
 						if (this.status_BG != 0) {
 							if (this.status_BG == 2) { this.MusicAndSE.ChangeBGM(1, true, 600); }
@@ -1069,7 +982,6 @@ export class MainGame extends CustomScene {
 										this.BetMinusBtn.disable(false, 'Bet--_C');
 										this.MaxBetBtn.disable(false, 'MaxBet_C');
 										// this.historyBtn.disable(false, 'his_hisBtn');
-
 										this.auto = false;
 										this.AutoBtn.changeBtnImage('Auto_A', 'Auto_B');
 										this.status = 0;
@@ -1186,7 +1098,6 @@ export class MainGame extends CustomScene {
 		this.startAniTime.t2 = 0; this.startAniTime.wave = false;
 		this.startWave1.setScale(0.33).setAlpha(0);
 		this.startEffectSpeed = -0.05;
-
 		this.StartBtnCon.scale = 0.9;
 	}
 	//#region 開始按鈕電弧背景動畫
@@ -1215,10 +1126,8 @@ export class MainGame extends CustomScene {
 		this.betText.setText(ChangeNumText_Comma(this.myBet));
 		this.BetBoard.ChangeBet(index);
 		//this.totalBetText.setText(this.ChangeNumText_Comma(this.myTotalBet));//總押注洗分
-
 		this.MoneyNotEnough(this.myTotalBet > this.finalScore);
 		this.Odd.ChangeOddText(this.myTotalBet);
-
 		if (this.ApiCtrl != null) { this.ApiCtrl.sendBetToBigJackpot(this.myTotalBet); }
 	}
 	//#endregion 押注
@@ -1232,7 +1141,6 @@ export class MainGame extends CustomScene {
 			this.MaxBetBtn.disable(disable, 'MaxBet_C');
 			// this.historyBtn.disable(disable, 'his_hisBtn');
 			this.AutoBtn.disable(disable, 'Auto_A')
-
 			this.auto = false;
 			if (disable) {
 				if (this.startNorAni != null) { this.startNorAni.remove(); }
@@ -1241,7 +1149,6 @@ export class MainGame extends CustomScene {
 				this.startNorAni = this.tweens.add(this.startNorTask);
 				this.startEffectSpeed = 1;
 			}
-
 		} else if (!(!disable && this.RollBarControl.returnStart())) {	//防止「當解除自動、並且滾輪仍在轉」時, 按鈕被解除鎖定			
 			this.StartBtn.disable(disable, 'Start_A');
 			this.betListOpen.disable(disable);
@@ -1292,10 +1199,8 @@ export class MainGame extends CustomScene {
 	//#region 洗分動畫
 	ScoreBoardAni(delayT) {
 		let ego = this;
-
 		this.scoreAniPlaying = true;
 		let timeline = ego.tweens.createTimeline();
-
 		//#region 移動到定位
 		timeline.add({
 			targets: ego.winBoard,
@@ -1315,10 +1220,8 @@ export class MainGame extends CustomScene {
 			onComplete: function () {
 				if (this.P_ContinuousBoomTimes == 0) {
 					this.scoreAniPlaying = false;
-
 					if (!this.P_FreeGame) { this.UpdateScore(500); }
 					else { ego.moneyFinish = true; }
-
 					if (this.auto) {
 						//this.StartAuto();
 					} else {
@@ -1343,19 +1246,13 @@ export class MainGame extends CustomScene {
 				console.log('進BigWin');
 			} else {
 				this.ScoreBoardAni(delayT);
-
 				let ego = this;
-
 				this.targetWinScore += this.tmpScore;
-
 				let tmpTargetWinScore = this.targetWinScore;
 				let tmpmyWinScore = this.myWinScore;
-
 				let plus = 0;
 				let dis = isBonus ? this.tmpScore : tmpTargetWinScore - tmpmyWinScore;
 				let final = 0;
-
-
 				let time = { t: 0 }
 				this.tweens.add({
 					targets: time,
@@ -1378,24 +1275,19 @@ export class MainGame extends CustomScene {
 				this.tmpScore = 0;
 			}
 		}
-
 	}
 	UpdateScore(totalTime) {
 		let ego = this;
-
 		if (ego.updateScoreAni != null) { ego.updateScoreAni.remove(); }
-
 		let tmpMyScore = ego.finalScore - ego.myMoney //ego.myWinScore;
 		let tmpWinScore = ego.myWinScore;
 		ego.myWinScore = ego.targetWinScore = 0;
-
 		let plus = 0;
 		let plus2 = 0;
 		let dis = tmpMyScore;
 		let dis2 = tmpWinScore;
 		let final = 0;
 		let final2 = 0;
-
 		let time = { t: 0 }
 		ego.updateScoreAni = ego.tweens.add({
 			targets: time,
@@ -1404,10 +1296,8 @@ export class MainGame extends CustomScene {
 			onUpdate: function () {
 				plus = Math.round(dis - (dis * (1 - time.t)));
 				plus2 = Math.round(dis2 - (dis2 * (1 - time.t)));
-
 				final = tmpWinScore - plus2;
 				ego.winMoneyText.setText(ChangeNumText_Comma(final));
-
 				final2 = ego.myMoney + plus;
 				ego.upUIMoneyText.setText(ChangeNumText_Comma(final2));
 				ego.exchangeText.setText(ChangeNumText_Comma((final2 / ego.moneyChangeOdd), 2));
@@ -1430,7 +1320,6 @@ export class MainGame extends CustomScene {
 	//#region BigWin
 	BigWinOccur(occur = false, toLevel = 0, delayT = 0) {
 		this.scoreAniPlaying = occur;
-
 		if (occur) {
 			this.PhysicalSystem.coinMaxNum = 10;
 			this.bigWinCon.list[0].setTexture('bigWin_Light_0');
@@ -1440,18 +1329,14 @@ export class MainGame extends CustomScene {
 			this.bigWinCon.list[5].setTexture('bigWin_Word_White_0');
 			this.bigWinCon.list[6].setTexture('bigWin_BG_White_0');
 			this.BigWinScore(toLevel, delayT);
-
 			if (this.forEvent_AllPlateStop && this.isAllPlate) {
 				this.auto = false;
 				this.AutoBtn.changeBtnImage('Auto_A', 'Auto_B');
 			}
 		} else {
-
-
 			this.nowBigWinLevel = 0;
 			this.showBigWinCoin = false;
 		}
-
 		let timeline = this.tweens.createTimeline();
 		timeline.add({
 			targets: this.bigWinCon,
@@ -1464,14 +1349,12 @@ export class MainGame extends CustomScene {
 					this.MusicAndSE.ChangeBGM(2);
 					this.blackCover.setAlpha(0.5);
 					this.MusicAndSE.PlaySoundEffect('SE_BigWinCoin', true);
-
 					this.showBigWinCoin = true;
 					this.PhysicalSystem.EffectOn();
 				} else {
 					// this.MusicAndSE.ChangeBGM(this.isFreeGame ? 2 : this.isPunchGame ? 3 : this.auto ? 1 : 0, true, 1000);
 					// if (!this.isFreeGame && !this.isPunchGame) { this.MusicAndSE.ChangeVolume(1, 0.9); }
 					this.blackCover.setAlpha(0);
-
 					if (this.forEvent_AllPlateStop && this.isAllPlate) {
 						this.WinEffectCtrl.AllPlateFinal(true);
 						this.blackCover.setAlpha(0.5);
@@ -1515,13 +1398,11 @@ export class MainGame extends CustomScene {
 		}
 		timeline.play();
 	}
-
 	BigWinScore(toLevel = 0, delayT = 0) {
 		this.targetWinScore += this.tmpScore;
 		let plus = 0;
 		let dis = this.tmpScore;
 		let final = 0;
-
 		let time = { t: 0 }
 		this.tweens.add({
 			targets: time,
@@ -1538,7 +1419,6 @@ export class MainGame extends CustomScene {
 					this.BigWinLevelUp();
 					this.nowBigWinLevel++;
 				}
-
 				this.PhysicalSystem.AddCoin(5);
 			}.bind(this),
 			completeDelay: 1000,
@@ -1566,7 +1446,6 @@ export class MainGame extends CustomScene {
 			}.bind(this)
 		})
 	}
-
 	BigWinLevelUp() {
 		this.PhysicalSystem.coinMaxNum = 25 * (this.nowBigWinLevel + 1) + Math.pow(5, this.nowBigWinLevel + 1);
 		let timeline = this.tweens.createTimeline();
@@ -1590,15 +1469,12 @@ export class MainGame extends CustomScene {
 			duration: 300,
 			onStart: function () {
 				this.bigWinCon.list[6].setVisible(true);
-
 				this.bigWinCon.list[0].setTexture('bigWin_Light_' + this.nowBigWinLevel);
 				this.bigWinCon.list[1].setTexture('bigWin_BG_' + this.nowBigWinLevel);
 				this.bigWinCon.list[2].setTexture('bigWin_Word_' + this.nowBigWinLevel);
-
 			}.bind(this),
 			offset: '-=0'
 		})
-
 		timeline.add({
 			targets: this.bigWinCon,
 			scale: 1,
@@ -1624,7 +1500,6 @@ export class MainGame extends CustomScene {
 				this.bigWinCon.list[6].setVisible(false).setScale(1);
 			}.bind(this)
 		})
-
 		timeline.play();
 	}
 	//#endregion
@@ -1675,19 +1550,15 @@ export class MainGame extends CustomScene {
 		this.mainSlotPrize = mainSlotPrize;
 		this.P_ContinuousBoomTimes = mainSlotPrize.WayPrizeList.length - 1;
 		this.finalScore = mainSlotPrize.win + this.myMoney;
-
 		this.P_prize_jewellerytext[0] = mainSlotPrize.role[0].mul;
 		this.P_prize_role[0] = mainSlotPrize.role[0].sym;
 		this.P_FreeGameTimes = mainSlotPrize.addFreeTimes;
-
 		this.Hercules.free_number.text = ChangeNumText_Comma(this.P_FreeGameTimes);
 		this.JewelleryControl.ControlShowJewellery(this.P_prize_jewellery, this.P_prize_jewellerytext, this.P_prize_role, this.P_FreeGame);
 		this.MusicAndSE.PlaySoundEffect('SE_ChangRole');
-
 		if (mainSlotPrize.mul > 1) { this.P_JewelleryMove[0] = true; }
 		else if (mainSlotPrize.addFreeTimes != 0) { this.P_JewelleryMove[0] = true; }
 		else { this.P_JewelleryMove[0] = false; }
-
 		// if (this.phpServer) {
 		// 	if (mainSlotPrize.WayPrizeList[0].symPrize == null) {
 		// 		this.MissWin = true;
@@ -1702,14 +1573,12 @@ export class MainGame extends CustomScene {
 		if (mainSlotPrize.WayPrizeList[0].symPrize != null && mainSlotPrize.WayPrizeList[0].symPrize.length != 0) {
 			this.MissWin = false;
 			this.Winning = true;
-
 		}
 		else {
 			this.MissWin = true;
 			this.Winning = false;
 		}
 		// }
-
 		if (!this.phpServer) {
 			SetCookie('State', 2);
 			SetCookie('LastRecID', this.BetResult.RecID);
@@ -1771,7 +1640,6 @@ export class MainGame extends CustomScene {
 		this.P_ContinuousBoomTimes = this.freeSlotPrize[this.Free_index].WayPrizeList.length - 1;
 		this.finalScore = this.freeSlotPrize[this.Free_index].win + this.myMoney;
 		this.P_FreeGameTimes = this.P_FreeGameTimes + this.freeSlotPrize[this.Free_index].addFreeTimes;
-
 		// if (this.phpServer) {
 		// 	if () {
 		// 		this.MissWin = true;
@@ -1792,11 +1660,9 @@ export class MainGame extends CustomScene {
 			this.Winning = false;
 		}
 		// }
-
 		for (let i = 0; i < this.freeSlotPrize[this.Free_index].role.length; i++) {
 			this.P_prize_jewellerytext[i + 1] = this.freeSlotPrize[this.Free_index].role[i].mul;
 			this.P_prize_role[i + 1] = this.freeSlotPrize[this.Free_index].role[i].sym;
-
 			if (this.freeSlotPrize[this.Free_index].WayPrizeList[0].symPrize == null) { continue; }
 			for (let j = 0; j < this.freeSlotPrize[this.Free_index].WayPrizeList[0].symPrize.length; j++) {
 				if (this.freeSlotPrize[this.Free_index].role[i].sym == this.freeSlotPrize[this.Free_index].WayPrizeList[0].symPrize[j].sym) {
@@ -1832,7 +1698,6 @@ export class MainGame extends CustomScene {
 		if (state != 0) {
 			let lastBet = GetCookie('LastBet');
 			let lastRecID = GetCookie('LastRecID');
-
 			cmd_ReBet.send(state, lastBet, lastRecID);
 			console.log(state, lastBet, lastRecID);
 		} else {

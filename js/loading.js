@@ -1,3 +1,6 @@
+/**
+ * 大廳到loading畫面
+ */
 import { CustomScene } from './CustomTools.js';
 // import { MusicPlayer } from './MusicPlayer_Controller.js';
 export class SceneLoading extends CustomScene {
@@ -9,7 +12,6 @@ export class SceneLoading extends CustomScene {
             from.scene.add("SceneLoading", this);
             from.scene.start("SceneLoading");
         }
-
         this.UseSetting;
     }
     preload() {
@@ -20,9 +22,7 @@ export class SceneLoading extends CustomScene {
         self.onceload.image("icon", "assets/Loading/G014_heracles_logo.png");
         self.onceload.image("Loading_game_cloud", "assets/Loading/Loading_game_cloud.png");
         self.onceload.image("Loading_game_text_BG", "assets/Loading/Loading_game_text_BG.png");
-
         self.onceload.spritesheet("loading_image", "assets/Loading/Loading_spin_6x3.png", { frameWidth: 150, frameHeight: 150 });
-
         self.scene.launch(self.target);
         if (self.scene.isActive("Music") == false) { self.scene.launch("Music"); }
         var target = self.scene.manager.keys[self.target];
@@ -31,7 +31,6 @@ export class SceneLoading extends CustomScene {
             self.clearAllTexture();
             self.scene.remove("SceneLoading");
         });
-
         //#region 機台相關(取資料 判定環境 回大廳)
         let AllVars = window.location.search.substring(1);
         let lobby = AllVars.split("L=");
@@ -40,12 +39,10 @@ export class SceneLoading extends CustomScene {
             self.UseSetting = lobby[1].split("&")[0];
             target.UseSetting = lobby[1].split("&")[0];
         }
-
         let betLimit = AllVars.split("B=");
         if (betLimit.length == 1) { betLimit = AllVars.split("b="); }
         if (betLimit[1] != null) target.betLimit = betLimit[1];
         //#endregion
-
     }
     create() {
         // super.create();
@@ -63,10 +60,8 @@ export class SceneLoading extends CustomScene {
             console.log('電腦loading    ' + this.UseSetting);
         }
         //#endregion
-
         // self.add.image(360, 740, "Loading_game_text_BG");
         // self.add.text(360, 740, "水果盛宴", { font: 'bold 42pt Noto Sans CJK TC', bold: true, align: 'center' }).setOrigin(0.5, 0.5);
-
         self.anims.create({
             key: "Loading",
             frames: self.anims.generateFrameNames('loading_image', { start: 0, end: 17, first: 0 }),
